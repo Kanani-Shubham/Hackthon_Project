@@ -1,0 +1,209 @@
+# Tender Document Generator Application Documentation
+
+## Project Structure
+
+### Core Files
+1. **main.py**
+   - Main Flask application entry point
+   - Handles routes and form submissions
+   - Manages PDF generation workflow
+   - Contains HTML template for the form
+   - Modules Used:
+     - `flask`: Web framework for routing and request handling
+     - `datetime`: For timestamp and date operations
+     - `os`: File path operations
+     - `gc`: Memory management
+     - `psutil`: System resource monitoring
+   - Functions:
+     - `form()`: Renders the main form
+     - `generate_pdf()`: Handles PDF generation
+     - `download_pdf()`: Manages file downloads
+     - `clear_memory()`: Memory optimization
+
+2. **model.py**
+   - Contains TenderGenerator class
+   - Integrates with Groq API for content generation
+   - Uses model: "llama-3.3-70b-versatile" or "llama-3.1-8b-instant"
+   - Handles section-wise content generation
+   - Modules Used:
+     - `groq`: API client for LLaMA model access
+     - `dotenv`: Environment variable management
+     - `typing`: Type hints for better code structure
+     - `datetime`: Timestamp generation
+   - Key Components:
+     - `TenderGenerator` class: Manages AI content generation
+     - Model: "llama-3.3-70b-versatile"
+     - Temperature: 0.8
+     - Max Length: 2000 tokens
+
+3. **pdf_generator.py**
+   - Manages PDF document creation
+   - Uses ReportLab library
+   - Handles formatting and styling
+   - Creates professional tender document layout
+   - Modules Used:
+     - `reportlab.lib`: PDF styling and colors
+     - `reportlab.platypus`: PDF content elements
+     - `reportlab.lib.pagesizes`: Page layout
+     - `reportlab.lib.styles`: Text styling
+   - Key Features:
+     - Custom styles for headers and body
+     - Table formatting for tender details
+     - Currency formatting (Rs.)
+     - Times-Roman font family
+
+4. **content_processor.py**
+   - Cleans and formats generated content
+   - Removes special characters
+   - Handles text formatting
+   - Processes currency symbols
+   - Modules Used:
+     - `typing`: Type annotations
+   - Functions:
+     - Content cleaning
+     - Special character removal
+     - Currency symbol standardization
+     - Text formatting
+
+5. **database.py**
+   - SQLite database configuration
+   - Defines database models
+   - Handles tender document storage
+   - Modules Used:
+     - `flask_sqlalchemy`: Database ORM
+     - `datetime`: Timestamp handling
+   - Models:
+     - `TenderDocument`: Main data model
+     - Relationship mappings
+     - Schema definitions
+
+6. **data_manager.py**
+   - Manages data persistence
+   - Handles database operations
+   - Stores tender information
+   - Modules Used:
+     - `database`: Local database module
+     - `datetime`: Date handling
+   - Functions:
+     - Data persistence
+     - CRUD operations
+     - File path management
+
+### Configuration Files
+1. **.env**
+   ```properties
+   GROQ_API_KEY=your_groq_api_key_here
+   MAX_LENGTH=2000
+   TEMPERATURE=0.8
+   ```
+
+2. **requirements.txt**
+   - Lists all project dependencies
+   - Includes Flask, SQLAlchemy, Groq, ReportLab etc.
+
+## API Integration
+- **Groq API**
+  - Used for content generation
+  - Model: llama-3.3-70b-versatile
+  - Requires API key from console.groq.com
+
+## Database Schema
+```sql
+CREATE TABLE tender_document (
+    id INTEGER NOT NULL,
+    tender_id VARCHAR(50) NOT NULL,
+    tender_title VARCHAR(200) NOT NULL,
+    issuing_authority VARCHAR(200) NOT NULL,
+    tender_amount FLOAT NOT NULL,
+    bid_start_date DATE NOT NULL,
+    bid_end_date DATE NOT NULL,
+    eligibility_criteria TEXT NOT NULL,
+    scope_of_work TEXT NOT NULL,
+    requirements TEXT NOT NULL,
+    contact_details TEXT NOT NULL,
+    mvp_details TEXT NOT NULL,
+    milestone_deliverables TEXT NOT NULL,
+    liquidated_damages TEXT NOT NULL,
+    pdf_path VARCHAR(255),
+    UNIQUE (tender_id)
+)
+```
+
+## Directory Structure
+```
+hackthon/
+├── main.py
+├── model.py
+├── pdf_generator.py
+├── content_processor.py
+├── database.py
+├── data_manager.py
+├── requirements.txt
+├── .env
+├── About.txt
+├── instance/
+│   └── data.db
+└── generated_pdfs/
+    └── [generated PDF files]
+```
+
+## Features
+1. **Form Interface**
+   - Professional Google Forms style
+   - Responsive design
+   - Input validation
+
+2. **Content Generation**
+   - AI-powered content creation
+   - Section-wise generation
+   - Professional formatting
+
+3. **PDF Generation**
+   - Professional layout
+   - Proper formatting
+   - Currency handling (Rs.)
+   - Times New Roman font
+
+4. **Data Management**
+   - SQLite database storage
+   - Unique tender IDs
+   - PDF file management
+
+## Getting Started
+1. Install dependencies:
+   ```powershell
+   pip install -r requirements.txt
+   ```
+
+2. Set up environment:
+   - Create .env file
+   - Add Groq API key
+   - Create generated_pdfs directory
+
+3. Run application:
+   ```powershell
+   python main.py
+   ```
+
+## API Keys
+- Groq API: Get from console.groq.com
+- Store in .env file
+- Never commit API keys to version control
+
+## Error Handling
+- Form validation
+- API error handling
+- Database error management
+- PDF generation fallbacks
+
+## Output
+- Professional tender documents
+- Proper formatting
+- Consistent styling
+- Secure storage
+
+## Security Considerations
+- API key protection
+- Input validation
+- Secure file handling
+- Database security
